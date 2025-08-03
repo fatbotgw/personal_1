@@ -24,7 +24,23 @@ class SettingsPuzzle(App):
         self.update_output()
     
     def update_output(self):
-        # Get values from inputs and update output
-        # You'll implement your puzzle logic here
-        output_widget = self.query_one("#output", Static)
-        output_widget.update("Current: [yellow]CHECKING...[/]")
+        try:
+            # Get values from the three inputs
+            val1 = int(self.query_one("#setting1", Input).value or 0)
+            val2 = int(self.query_one("#setting2", Input).value or 0) 
+            val3 = int(self.query_one("#setting3", Input).value or 0)
+            
+            # Your puzzle logic here - example:
+            target_sum = 150  # or whatever your target is
+            current_sum = val1 + val2 + val3
+            
+            output_widget = self.query_one("#output", Static)
+            if current_sum == target_sum:
+                output_widget.update("Current: [green]SUCCESS![/]")
+            else:
+                output_widget.update(f"Current: [red]Sum is {current_sum}, need {target_sum}[/]")
+                
+        except ValueError:
+            # Handle non-numeric input
+            output_widget = self.query_one("#output", Static)
+            output_widget.update("Current: [red]Please enter numbers[/]")
