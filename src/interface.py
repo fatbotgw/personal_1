@@ -1,9 +1,13 @@
-from textual.app import App
-from textual.widgets import Static, Input, Button
+from textual.app import App, ComposeResult
+from textual.widgets import Static, Input, Button, Header, Footer
 from textual.containers import Horizontal, Vertical
 
 class SettingsPuzzle(App):
-    def compose(self):
+    BINDINGS = [("d", "toggle_dark", "Toggle dark mode")]
+
+    def compose(self) -> ComposeResult:
+        yield Header()
+        yield Footer()
         with Horizontal():
             with Vertical():
                 yield Static("Settings:")
@@ -15,6 +19,12 @@ class SettingsPuzzle(App):
                 yield Static("Target: [green]SUCCESS[/]")
                 yield Static("Current: [red]FAIL[/]", id="output")
     
+    def action_toggle_dark(self) -> None:
+        """An action to toggle dark mode."""
+        self.theme = (
+            "textual-dark" if self.theme == "textual-light" else "textual-light"
+        )
+
     def on_button_pressed(self, event):
         if event.button.id == "update_btn":
             self.update_output()
