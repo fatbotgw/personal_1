@@ -25,13 +25,14 @@ class SettingsPuzzle(App):
             "textual-dark" if self.theme == "textual-light" else "textual-light"
         )
 
-    def on_button_pressed(self, event):
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        """Event handler called when a button is pressed."""
         if event.button.id == "update_btn":
             self.update_output()
     
-    def on_input_changed(self, event):
-        # Real-time updates as user types
-        self.update_output()
+    # def on_input_changed(self, event):
+    #     # Real-time updates as user types
+    #     self.update_output()
     
     def update_output(self):
         try:
