@@ -23,6 +23,7 @@ class SettingsPuzzle(App):
         self.box.styles.background = "red"
         self.box.styles.color = "black"
         self.box.styles.padding = (1, 2)
+        self.box.styles.opacity = 0.0
         yield self.box
     
     def action_toggle_dark(self) -> None:
@@ -54,13 +55,23 @@ class SettingsPuzzle(App):
             output_widget = self.query_one("#output", Static)
             if current_sum == target_sum:
                 output_widget.update("Current: [green]SUCCESS![/]")
+                self.box.update("CORRECT VALUE")
+                self.box.styles.background = "green"
+                self.box.styles.color = "white"
+                self.box.styles.opacity = 1.0
+                self.box.styles.animate("opacity", value=0.0, duration=3.0)
             else:
                 output_widget.update(f"Current: [red]Sum is {current_sum}, need {target_sum}[/]")
+                self.box.update("INCORRECT VALUE!")
+                self.box.styles.background = "red"
+                self.box.styles.color = "black"
+                self.box.styles.opacity = 1.0
+                self.box.styles.animate("opacity", value=0.0, duration=3.0)
                 
         except ValueError:
             # Handle non-numeric input
             output_widget = self.query_one("#output", Static)
             output_widget.update("Current: [red]Please enter numbers[/]")
 
-    def on_mount(self):
-        self.box.styles.animate("opacity", value=0.0, duration=3.0)
+    # def on_mount(self):
+    #     self.box.styles.animate("opacity", value=0.0, duration=3.0)
