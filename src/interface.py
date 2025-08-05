@@ -1,9 +1,12 @@
+import random
 from textual.app import App, ComposeResult
 from textual.widgets import Static, Input, Button, Header, Footer
 from textual.containers import Horizontal, Vertical
 
+
 class SettingsPuzzle(App):
     BINDINGS = [("d", "toggle_dark", "Toggle dark mode")]
+    target_value = random.randint(1, 101)
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -49,7 +52,7 @@ class SettingsPuzzle(App):
             val3 = int(self.query_one("#setting3", Input).value or 0)
             
             # Your puzzle logic here - example:
-            target_sum = 150  # or whatever your target is
+            target_sum = self.target_value  # or whatever your target is
             current_sum = val1 + val2 + val3
             
             output_widget = self.query_one("#output", Static)
