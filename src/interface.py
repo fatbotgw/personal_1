@@ -18,6 +18,12 @@ class SettingsPuzzle(App):
             with Vertical():
                 yield Static("Target: [green]SUCCESS[/]")
                 yield Static("Current: [red]FAIL[/]", id="output")
+        
+        self.box = Static("INCORRECT VALUE!")
+        self.box.styles.background = "red"
+        self.box.styles.color = "black"
+        self.box.styles.padding = (1, 2)
+        yield self.box
     
     def action_toggle_dark(self) -> None:
         """An action to toggle dark mode."""
@@ -55,3 +61,6 @@ class SettingsPuzzle(App):
             # Handle non-numeric input
             output_widget = self.query_one("#output", Static)
             output_widget.update("Current: [red]Please enter numbers[/]")
+
+    def on_mount(self):
+        self.box.styles.animate("opacity", value=0.0, duration=3.0)
