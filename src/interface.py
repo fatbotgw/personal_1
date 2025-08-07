@@ -1,7 +1,30 @@
 import random
+from time import monotonic
 from textual.app import App, ComposeResult
-from textual.widgets import Static, Input, Button, Header, Footer
+from textual.widgets import Digits, Static, Input, Button, Header, Footer
 from textual.containers import Horizontal, Vertical
+from textual.reactive import reactive
+
+
+class TimeDisplay(Digits):
+    """A widget to display elapsed time."""
+
+    start_time = reactive(monotonic)
+    time = reactive(0.0)
+
+    def on_mount(self) -> None:
+        """Event handler called when widget is added to the app."""
+        self.set_interval(1 / 60, self.update_time)
+
+    def update_time(self) -> None:
+        """Method to update the time to the current time."""
+        self.time = monotonic() - self.start_time
+
+    def watch_time(self, time: float) -> None:
+        """Called when the time attribute changes."""
+        minutes, seconds = divmod(time, 60)
+        hours, minutes = divmod(minutes, 60)
+        self.update(f"{hours:02,.0f}:{minutes:02.0f}:{seconds:05.2f}")
 
 
 class SettingsPuzzle(App):
@@ -15,20 +38,21 @@ class SettingsPuzzle(App):
             with Vertical():
                 yield Static("Settings:")
                 yield Input(placeholder="Setting 1 (0-100)", id="setting1")
-                yield Input(placeholder="Setting 2 (0-100)", id="setting2") 
+                yield Input(placeholder="Setting 2 (0-100)", id="setting2")
                 yield Input(placeholder="Setting 3 (0-100)", id="setting3")
                 yield Button("Update", id="update_btn")
             with Vertical():
                 yield Static("Target: [green]SUCCESS[/]")
                 yield Static("Current: [red]FAIL[/]", id="output")
-        
+
+        yield TimeDisplay()
         self.box = Static("INCORRECT VALUE!")
         self.box.styles.background = "red"
         self.box.styles.color = "black"
         self.box.styles.padding = (1, 2)
         self.box.styles.opacity = 0.0
         yield self.box
-    
+
     def action_toggle_dark(self) -> None:
         """An action to toggle dark mode."""
         self.theme = (
@@ -39,22 +63,22 @@ class SettingsPuzzle(App):
         """Event handler called when a button is pressed."""
         if event.button.id == "update_btn":
             self.update_output()
-    
+
     # def on_input_changed(self, event):
     #     # Real-time updates as user types
     #     self.update_output()
-    
+
     def update_output(self):
         try:
             # Get values from the three inputs
             val1 = int(self.query_one("#setting1", Input).value or 0)
-            val2 = int(self.query_one("#setting2", Input).value or 0) 
+            val2 = int(self.query_one("#setting2", Input).value or 0)
             val3 = int(self.query_one("#setting3", Input).value or 0)
-            
+
             # Your puzzle logic here - example:
             target_sum = self.target_value  # or whatever your target is
             current_sum = val1 + val2 + val3
-            
+
             output_widget = self.query_one("#output", Static)
             if current_sum == target_sum:
                 output_widget.update("Current: [green]SUCCESS![/]")
@@ -64,13 +88,15 @@ class SettingsPuzzle(App):
                 self.box.styles.opacity = 1.0
                 self.box.styles.animate("opacity", value=0.0, duration=3.0)
             else:
-                output_widget.update(f"Current: [red]Sum is {current_sum}, need {target_sum}[/]")
+                output_widget.update(
+                    f"Current: [red]Sum is {current_sum}, need {target_sum}[/]"
+                )
                 self.box.update("INCORRECT VALUE!")
                 self.box.styles.background = "red"
                 self.box.styles.color = "black"
                 self.box.styles.opacity = 1.0
                 self.box.styles.animate("opacity", value=0.0, duration=3.0)
-                
+
         except ValueError:
             # Handle non-numeric input
             output_widget = self.query_one("#output", Static)
