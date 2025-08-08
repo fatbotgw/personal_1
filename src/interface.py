@@ -4,6 +4,7 @@ from textual.app import App, ComposeResult
 from textual.widgets import Digits, Static, Input, Button, Header, Footer
 from textual.containers import Horizontal, Vertical
 from textual.reactive import reactive
+from textual.theme import Theme
 
 
 class TimeDisplay(Digits):
@@ -102,5 +103,5 @@ class SettingsPuzzle(App):
             output_widget = self.query_one("#output", Static)
             output_widget.update("Current: [red]Please enter numbers[/]")
 
-    # def on_mount(self):
-    #     self.box.styles.animate("opacity", value=0.0, duration=3.0)
+    def on_mount(self) -> None:
+        self.theme = "nord"
