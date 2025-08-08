@@ -15,7 +15,7 @@ class TimeDisplay(Digits):
 
     def on_mount(self) -> None:
         """Event handler called when widget is added to the app."""
-        self.set_interval(1 / 60, self.update_time)
+        self.update_timer = self.set_interval(1 / 60, self.update_time)
 
     def update_time(self) -> None:
         """Method to update the time to the current time."""
@@ -26,6 +26,10 @@ class TimeDisplay(Digits):
         minutes, seconds = divmod(time, 60)
         hours, minutes = divmod(minutes, 60)
         self.update(f"{hours:02,.0f}:{minutes:02.0f}:{seconds:05.2f}")
+
+    def stop(self) -> None:
+        """Method to stop the time display updating."""
+        self.update_timer.pause()
 
 
 class SettingsPuzzle(App):
@@ -46,7 +50,9 @@ class SettingsPuzzle(App):
                 yield Static("Target: [green]SUCCESS[/]")
                 yield Static("Current: [red]FAIL[/]", id="output")
 
-        yield TimeDisplay()
+        # yield TimeDisplay()
+        self.timer = TimeDisplay()
+        yield self.timer
         self.box = Static("INCORRECT VALUE!")
         self.box.styles.background = "red"
         self.box.styles.color = "black"
@@ -88,6 +94,7 @@ class SettingsPuzzle(App):
                 self.box.styles.color = "white"
                 self.box.styles.opacity = 1.0
                 self.box.styles.animate("opacity", value=0.0, duration=3.0)
+                self.timer.stop()
             else:
                 output_widget.update(
                     f"Current: [red]Sum is {current_sum}, need {target_sum}[/]"
