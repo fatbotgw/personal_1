@@ -4,7 +4,6 @@ from textual.app import App, ComposeResult
 from textual.widgets import Digits, Static, Input, Button, Header, Footer
 from textual.containers import Horizontal, Vertical
 from textual.reactive import reactive
-from textual.theme import Theme
 
 
 class TimeDisplay(Digits):
