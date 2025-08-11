@@ -1,3 +1,4 @@
+from logging import currentframe
 import random
 from time import monotonic
 from textual.app import App, ComposeResult
@@ -95,9 +96,14 @@ class SettingsPuzzle(App):
                 self.box.styles.animate("opacity", value=0.0, duration=3.0)
                 self.timer.stop()
             else:
-                output_widget.update(
-                    f"Current: [red]Sum is {current_sum}, need {target_sum}[/]"
-                )
+                if current_sum > target_sum:
+                    output_widget.update(
+                        f"Current: [red]Sum is {current_sum}, Value is too large, need {target_sum}[/]"
+                    )
+                else:
+                    output_widget.update(
+                        f"Current: [red]Sum is {current_sum}, Value is too small, need {target_sum}[/]"
+                    )
                 self.box.update("INCORRECT VALUE!")
                 self.box.styles.background = "red"
                 self.box.styles.color = "black"
