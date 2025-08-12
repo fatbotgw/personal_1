@@ -9,12 +9,20 @@ def main():
     # app.run()
 
     ureg = UnitRegistry()
-    length = CONT_40[0] * ureg.meter
-    width = CONT_40[1] * ureg.meter
+
+    #TODO the container size should be chosen by the user
+    container_size = CONT_40
+    
+    #TODO these values should use appropriate conversions based on container units
+    length = container_size[0] * ureg.meter
+    width = container_size[1] * ureg.meter
+    height = container_size[2] * ureg.meter
+    
     print(f"original length: {length}")
     print(f"meters to feet: {length.to("feet").magnitude}")
 
 
+    #TODO the pallet model should be chosen by the user
     if D430[0] > 1060:
       print("Long side is larger")
 
@@ -28,6 +36,10 @@ def main():
     fit_count_S = width // footprint_S.to("meter")
     print(f"how many will fit (width): {fit_count_S.magnitude}")
 
+    footprint_H = D430[2] * ureg.mm
+    print(footprint_H)
+    fit_count_H = height // footprint_H.to("meter")
+    print(f"how tall can the stack be: {fit_count_H.magnitude}")
 
 if __name__ == "__main__":
    main()
