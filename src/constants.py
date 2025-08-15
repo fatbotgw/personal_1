@@ -10,12 +10,12 @@ D644 = (1050, 760, 80)
 
 
 # Shipping Containers
+#   https://en.wikipedia.org/wiki/Intermodal_container#Specifications
 #   dimensions are internal and approximate
-# CONT = (Long, Short, Height) <<-- meters
-CONT_10 = (2.84, 2.28, 2.26)
-CONT_20 = (5.44, 2.28, 2.26)
-CONT_40 = (12.04, 2.28, 2.26)
-CONT_40HC = (12.04, 2.89, 2.26)
+# CONT = (Length, Width, Height) <<-- meters
+CONT_20 = (5.867, 2.330, 2.350)
+CONT_40 = (11.998, 2.330, 2.350)
+CONT_40HC = (11.998, 2.330, 2.654)
 
 # Semi Trailers
 #   dimensions are internal and approximate
