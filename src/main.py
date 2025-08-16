@@ -1,10 +1,19 @@
 from interface import SettingsPuzzle
-from constants import *
+from constants import *  # noqa: F403
 from pint import UnitRegistry
 
-def fit_count(pallet_dim, container_dim, unitreg):
-    """Calculates number of stacks in the input direction"""
-    footprint = pallet_dim * unitreg.mm
+def fit_count(pallet_dim, container_dim, unitreg, p_units):
+    """Calculates number of stacks in the container dimension."""
+    if p_units == "mm":
+        units = unitreg.mm
+    elif p_units == "inch":
+        units = unitreg.inch
+    elif p_units == "feet":
+        units = unitreg.feet
+    else:
+        units = unitreg.meter
+
+    footprint = pallet_dim * units
 
     return container_dim // footprint.to("meter")
 
@@ -25,23 +34,22 @@ def main():
     length = container_size[0] * ureg.meter
     width = container_size[1] * ureg.meter
     height = container_size[2] * ureg.meter
-    
-    print(f"original length: {length}")
-    print(f"meters to feet: {length.to("feet").magnitude}")
-
 
     #TODO the pallet model should be chosen by the user
-    pallet_model = D430
+    pallet_model = D322
     if pallet_model[0] > 1060:
       print("Long side is larger")
 
-    fit_count_L = fit_count(pallet_model[0], length, ureg)
+    # this is the length of the trailer/container
+    fit_count_L = fit_count(pallet_model[0], length, ureg, pallet_model[3])
     print(f"how many will fit (length): {fit_count_L.magnitude}")
 
-    fit_count_S = fit_count(pallet_model[1], width, ureg)
+    # this is the width of the trailer/container
+    fit_count_S = fit_count(pallet_model[1], width, ureg, pallet_model[3])
     print(f"how many will fit (width): {fit_count_S.magnitude}")
 
-    fit_count_H = fit_count(pallet_model[2], height, ureg)
+    # this is the height of the trailer/container
+    fit_count_H = fit_count(pallet_model[2], height, ureg, pallet_model[3])
     print(f"how tall can the stack be: {fit_count_H.magnitude}")
 
 
