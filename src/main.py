@@ -2,6 +2,13 @@ from interface import SettingsPuzzle
 from constants import *
 from pint import UnitRegistry
 
+def fit_count(pallet_dim, container_dim, unitreg):
+    """Calculates number of stacks in the input direction"""
+    footprint = pallet_dim * unitreg.mm
+
+    return container_dim // footprint.to("meter")
+
+
 def main():
     # print("Hello from personal-1!")
 
@@ -28,17 +35,15 @@ def main():
     if pallet_model[0] > 1060:
       print("Long side is larger")
 
-    footprint_L = pallet_model[0] * ureg.mm
-    fit_count_L = length // footprint_L.to("meter")
+    fit_count_L = fit_count(pallet_model[0], length, ureg)
     print(f"how many will fit (length): {fit_count_L.magnitude}")
 
-    footprint_S = pallet_model[1] * ureg.mm
-    fit_count_S = width // footprint_S.to("meter")
+    fit_count_S = fit_count(pallet_model[1], width, ureg)
     print(f"how many will fit (width): {fit_count_S.magnitude}")
 
-    footprint_H = pallet_model[2] * ureg.mm
-    fit_count_H = height // footprint_H.to("meter")
+    fit_count_H = fit_count(pallet_model[2], height, ureg)
     print(f"how tall can the stack be: {fit_count_H.magnitude}")
+
 
     fit_count_stacks = fit_count_L.magnitude * fit_count_S.magnitude
     print(f"You can fit {fit_count_stacks} stacks in a {container_label}.")
