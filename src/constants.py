@@ -15,12 +15,12 @@ D644 = (1050, 760, 80, "mm")
 #   https://en.wikipedia.org/wiki/Intermodal_container#Specifications
 #   dimensions are internal and approximate
 # CONT = (Length, Width, Height) <<-- meters
-CONT_20 = (5.867, 2.330, 2.350)
-CONT_40 = (11.998, 2.330, 2.350)
-CONT_40HC = (11.998, 2.330, 2.654)
+CONT_20 = (5.867, 2.330, 2.350, "meter")
+CONT_40 = (11.998, 2.330, 2.350, "meter")
+CONT_40HC = (11.998, 2.330, 2.654, "meter")
 
 # Semi Trailers
 #   dimensions are internal and approximate
 # Trailer = (Long, Short, Height) <<-- feet, inch, inch
-TRAILER_53 = (52.5, 99, 110)
-TRAILER_48 = (47.5, 99, 110)
+TRAILER_53 = (630, 99, 110, "inch")    #(52.5, 99, 110)
+TRAILER_48 = (570, 99, 110, "inch")    #(47.5, 99, 110)
