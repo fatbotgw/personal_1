@@ -101,6 +101,39 @@ def create_result(pallet, total_pallets, layers, pallets_per_layer,
             # 'efficiency_percent': ((container_dims[0] * 1000 - waste_width) / (container_dims[0] * 1000)) * 100 if container_dims[0] > 0 else 0
         }
 
+def get_user_input():
+    print("Available containers: CONT_20, CONT_40, CONT_40HC, TRAILER_53, TRAILER_48")
+    container_name = input("Enter container type: ").upper()
+    
+    if container_name in globals():
+        container_dims = globals()[container_name]
+        print(f"\tUsing {container_name}: {container_dims}")
+    else:
+        print(f"Container '{container_name}' not found! Defaulting to CONT_40")
+        container_dims = CONT_40  # Fallback
+    
+    # Get all pallet constants (exclude containers and other stuff)
+    available_pallets = [name for name in globals() 
+                        if not name.startswith('CONT_')
+                        and not name.startswith('TRAILER_')
+                        and not name.startswith('_')
+                        and isinstance(globals()[name], tuple)]
+    
+    while True:
+        pallet_name = input("Enter pallet model: ").upper()
+        
+        if pallet_name in globals() and pallet_name in available_pallets:
+            pallet = globals()[pallet_name]
+            break
+        else:
+            print(f"Error: Pallet model '{pallet_name}' not found!")
+            print(f"Available pallets: {', '.join(available_pallets)}")
+            # Loop continues, asking again
+
+    print("\n*************CALCULATING*************\n") # manually adding a separator
+    return container_dims, pallet
+
+
 def main():
     # print("Hello from personal-1!")
 
@@ -109,13 +142,7 @@ def main():
 
     ureg = UnitRegistry()
 
-    #TODO the container size should be chosen by the user
-    container_size = CONT_40
-    container_label = container_size[4]
-    
-    #TODO the pallet model should be chosen by the user
-    pallet_model = D430
-
+    container_size, pallet_model = get_user_input()
 
     arrangements = find_all_arrangements(container_size, pallet_model, ureg)
     # print(arrangements)
