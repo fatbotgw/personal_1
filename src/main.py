@@ -135,8 +135,8 @@ def get_user_input():
 
 
 def main():
-    # print("Hello from personal-1!")
-
+    # TODO implement a Textual interface (or something else?) to provide a 
+    #       graphical representation of the container loadout
     # app = SettingsPuzzle()
     # app.run()
 
@@ -145,28 +145,9 @@ def main():
     container_size, pallet_model = get_user_input()
 
     arrangements = find_all_arrangements(container_size, pallet_model, ureg)
-    # print(arrangements)
 
     print(f"You can fit {arrangements['total_pallets']} total pallets in the container.")
     print(f"You should use the following arrangement: {arrangements['arrangement_pattern']}")
-
-    # # this is the length of the trailer/container
-    # fit_count_L = fit_count(pallet_model[0], length, ureg, pallet_model[3])
-    # print(f"how many will fit (length): {fit_count_L.magnitude}")
-
-    # # this is the width of the trailer/container
-    # fit_count_S = fit_count(pallet_model[1], width, ureg, pallet_model[3])
-    # print(f"how many will fit (width): {fit_count_S.magnitude}")
-
-    # # this is the height of the trailer/container
-    # fit_count_H = fit_count(pallet_model[2], height, ureg, pallet_model[3])
-    # print(f"how tall can the stack be: {fit_count_H.magnitude}")
-
-
-    # fit_count_stacks = fit_count_L.magnitude * fit_count_S.magnitude
-    # print(f"You can fit {fit_count_stacks} stacks in a {container_label}.")
-    # fit_count_total = fit_count_stacks * fit_count_H.magnitude
-    # print(f"That means you can fit {fit_count_total} pallets in a {container_label}.")
 
 if __name__ == "__main__":
    main()
